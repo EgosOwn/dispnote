@@ -15,13 +15,14 @@ const maxNotes int = 1000000
 const noteExpireSecs = time.Duration(3600) * time.Second
 
 func getNote(w http.ResponseWriter, req *http.Request) {
-	noteID := req.URL.Path[len("/getnote/"):]
-	w.Header().Add("Content-Type", "text/plain")
 	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "GET, OPTIONS")
+	noteID := req.URL.Path[len("/get/"):]
+	w.Header().Add("Content-Type", "text/plain")
 
 	var note = notes[noteID]
 	if note == "" {
-		fmt.Fprintf(w, "That note has either been read, expired, or never existed")
+		http.Error(w, "That note has either been read, expired, or never existed", http.StatusNotFound)
 		return
 	}
 	fmt.Fprintf(w, notes[noteID])
@@ -30,21 +31,23 @@ func getNote(w http.ResponseWriter, req *http.Request) {
 
 func addNote(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
-	if (len(notes) >= maxNotes){
+	w.Header().Add("Access-Control-Allow-Methods", "PUT, GET, OPTIONS")
+	if req.Method == http.MethodOptions {
+		return
+	}
+	if len(notes) >= maxNotes{
 		http.Error(w, "Maximum number of notes on server reached", http.StatusInternalServerError)
 		return
 	}
-	if req.Method == "PUT" {
+	if req.Method == http.MethodPut {
 		noteID := req.URL.Path[len("/put/"):]
 
 		if len(noteID) != noteIDSize {
-			fmt.Fprintf(w, "Note ID size must be %d", noteIDSize)
-			http.Error(w, "", http.StatusRequestURITooLong)
+			http.Error(w, "Note ID size must be 22", http.StatusRequestURITooLong)
 			return
 		}
 		if int(req.ContentLength) > int(maxNoteSize) {
-			fmt.Fprintf(w, "Note cannot exceed %d bytes", noteIDSize)
-			http.Error(w, "", 413)
+			http.Error(w, "Note cannot exceed 1024 bytes", 413)
 			return
 		}
 		if int(req.ContentLength) <= 0 {
@@ -69,7 +72,7 @@ func addNote(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 
-	http.HandleFunc("/getnote/", getNote)
+	http.HandleFunc("/get/", getNote)
 	http.HandleFunc(("/put/"), addNote)
 
 	notes = make(map[string]string)
