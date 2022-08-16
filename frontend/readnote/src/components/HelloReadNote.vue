@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  msg: string
+  msg: string,
+  sub: string
 }>()
 </script>
 
@@ -8,7 +9,7 @@ defineProps<{
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
     <h3>
-      create self destructing notes, no login or passwords
+      {{ sub }}
     </h3>
   </div>
 </template>

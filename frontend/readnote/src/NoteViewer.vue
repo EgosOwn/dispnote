@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import ReadNoteIntro from './components/HelloReadNote.vue'
-import NoteCreator from './components/NoteCreator.vue'
+import NoteViewer from './components/NoteViewer.vue'
 </script>
 
 <template>
   <header>
     <h1>📝</h1>
     <div class="wrapper">
-      <ReadNoteIntro msg="ReadNote" />
+      <ReadNoteIntro msg="ReadNote" sub="Someone has a note for you!" />
     </div>
   </header>
 
   <main>
-    <NoteCreator />
+    <NoteViewer />
   </main>
 </template>
 
@@ -24,10 +24,6 @@ header h1{
   font-size: 3em;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
 
 @media (min-width: 1024px) {
   header {
@@ -35,11 +31,6 @@ header h1{
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
   header .wrapper {
     display: flex;
     place-items: flex-start;
