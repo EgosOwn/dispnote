@@ -10,7 +10,7 @@ import (
 var notes map[string]string
 
 const maxNoteSize int64 = 1024
-const noteIDSize int = 22
+const noteIDSize int = 31
 const maxNotes int = 1000000
 const noteExpireSecs = time.Duration(3600) * time.Second
 
@@ -43,7 +43,7 @@ func addNote(w http.ResponseWriter, req *http.Request) {
 		noteID := req.URL.Path[len("/put/"):]
 
 		if len(noteID) != noteIDSize {
-			http.Error(w, "Note ID size must be 22", http.StatusRequestURITooLong)
+			http.Error(w, "Note ID size must be 31", http.StatusRequestURITooLong)
 			return
 		}
 		if int(req.ContentLength) > int(maxNoteSize) {
@@ -61,7 +61,7 @@ func addNote(w http.ResponseWriter, req *http.Request) {
 
 		go func(toDel string) {
 			time.Sleep(noteExpireSecs)
-			delete(notes, toDel)
+			delete(notes, toDel) // Noop if key doesn't exist
 		}(noteID)
 
 	} else {

@@ -3,6 +3,9 @@
 </script>
 
 <script>
+import aes from 'crypto-js/aes'
+import enc from 'crypto-js/enc-utf8'
+
 export default {
   data() {
     return {
@@ -10,47 +13,23 @@ export default {
       noteCreateResponse: '',
       noteCreatedURL: '',
       formShow: true,
-      key: new ArrayBuffer(),
+      key: '',
       noteID: ''
     }
   },
 methods: {
   async createNote(){
-      return window.crypto.subtle.generateKey(
-          {
-              name: "AES-CTR",
-              length: 256, //can be  128, 192, or 256
-          },
-          true, //whether the key is extractable (i.e. can be used in exportKey)
-          ["encrypt", "decrypt"] //can "encrypt", "decrypt", "wrapKey", or "unwrapKey"
-      )
-      .then((key)=>{
-          //returns a key object
-          window.crypto.subtle.exportKey("raw", key).then((exportedKey)=>{
-            this.$data.noteID += "#" + btoa(exportedKey)
-          })
-          let encoder = new TextEncoder()
+    let arr = new Int32Array(4); crypto.getRandomValues(arr)
 
-           window.crypto.subtle.encrypt(
-              {
-                  name: "AES-CTR",
-                  //Don't re-use counters!
-                  //Always use a new counter every time your encrypt!
-                  counter: new Uint8Array(16),
-                  length: 128, //can be 1-128
-              },
-              key, //from generateKey or importKey above
-              encoder.encode(this.$data.message) //ArrayBuffer of data you want to encrypt
-          )
-          .then((encrypted)=>{
-              //returns an ArrayBuffer containing the encrypted data
-              this.$data.message = encrypted
-              console.log(this.$data.message);
-          })
-          .catch(function(err){
-              console.error(err);
-          });
-      })
+    let key = btoa(arr).replaceAll('=', '')
+
+    this.$data.key = key
+
+    //console.debug(this.$data.message)
+    this.$data.message = aes.encrypt(this.$data.message, key)
+
+    //let decrypted = aes.decrypt(this.$data.message, key)
+    //console.debug(enc.parse(decrypted))
   },
   async submitNote(event) {
     // Prevent the browser from doing a regular form submit
@@ -61,9 +40,9 @@ methods: {
 
     let getNoteID = async function(){
       let id = ""
-      let arr = new Uint8Array(8)
+      let arr = new Int32Array(2)
       crypto.getRandomValues(arr)
-      return btoa(arr).substring(0, 32)
+      return btoa(arr).replaceAll('=', '').padStart(31, '0')
     }
 
     if (event) {
@@ -91,7 +70,7 @@ methods: {
         result.text().then((text) =>{
           if (! error){
             this.$data.noteCreateResponse += (text + " Copy this URL: ")
-            this.$data.noteCreatedURL = rootURL + "/get/" + this.$data.noteID
+            this.$data.noteCreatedURL = document.location.protocol + '//' + document.location.host + "/read.html#" + this.$data.noteID + this.$data.key
           }
           else{
             this.$data.noteCreateResponse += text

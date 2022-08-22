@@ -7,7 +7,7 @@ import NoteViewer from './components/NoteViewer.vue'
   <header>
     <h1>📝</h1>
     <div class="wrapper">
-      <ReadNoteIntro msg="ReadNote" sub="Someone has a note for you!" />
+      <ReadNoteIntro msg="ReadNote" sub="Someone has a note for you! It will disappear forever once you close this page" />
     </div>
   </header>
 
