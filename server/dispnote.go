@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"io"
-	"time"
 	"net/http"
+	"os"
+	"time"
 )
 
 var notes map[string]string
@@ -78,5 +79,7 @@ func main() {
 
 	notes = make(map[string]string)
 
-	http.ListenAndServe(":8090", nil)
+	bind_addr := os.Getenv("DISPNOTE_BIND_ADDR")
+
+	http.ListenAndServe(bind_addr, nil)
 }
