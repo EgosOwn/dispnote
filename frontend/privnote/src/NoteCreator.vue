@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import ReadNoteIntro from './components/HelloReadNote.vue'
+import DispNoteIntro from './components/HelloDispNote.vue'
 import NoteCreator from './components/NoteCreator.vue'
 </script>
 
 <template>
   <header>
-    <h1>📝</h1>
     <div class="wrapper">
-      <ReadNoteIntro msg="ReadNote" sub="Create self destructing, encrypted messages" />
+      <DispNoteIntro msg="DispNote" sub="Create self destructing, encrypted messages" />
     </div>
   </header>
 
@@ -24,9 +23,8 @@ header h1{
   font-size: 3em;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+main{
+  margin-top: 2em;
 }
 
 @media (min-width: 1024px) {

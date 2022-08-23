@@ -9,13 +9,14 @@ import (
 
 var notes map[string]string
 
-const maxNoteSize int64 = 1024
+const maxNoteSize int64 = 6000
 const noteIDSize int = 31
 const maxNotes int = 1000000
 const noteExpireSecs = time.Duration(3600) * time.Second
 
 func getNote(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Clear-Site-Data", "*")
 	w.Header().Add("Access-Control-Allow-Methods", "GET, OPTIONS")
 	noteID := req.URL.Path[len("/get/"):]
 	w.Header().Add("Content-Type", "text/plain")
@@ -47,7 +48,7 @@ func addNote(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		if int(req.ContentLength) > int(maxNoteSize) {
-			http.Error(w, "Note cannot exceed 1024 bytes", 413)
+			http.Error(w, "Note cannot exceed 6000 bytes", 413)
 			return
 		}
 		if int(req.ContentLength) <= 0 {

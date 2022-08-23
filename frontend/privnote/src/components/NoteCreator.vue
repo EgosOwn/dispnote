@@ -96,7 +96,7 @@ methods: {
 
 <form method="POST" @submit="submitNote" v-if="formShow">
   <textarea v-model="message" placeholder="the note text" required></textarea>
-  <input type="submit" value="Submit Note">
+  <input type="submit" value="Create">
 </form>
 <div v-if="! formShow">
 <div>{{ noteCreateResponse }}</div>
@@ -110,5 +110,34 @@ textarea{
   width: 100%;
   min-height: 350px;
   margin-bottom: 1em;
+}
+input[type="submit"] {
+   border-radius: 20px;
+   color: #FFFFFF;
+   font-family: Open Sans;
+   font-size: 2em;
+   font-weight: 100;
+   padding: 20px;
+   background-color: #003C80;
+   box-shadow: 1px 1px 10px 0 #000000;
+   text-shadow: 1px 1px 20px #000000;
+   border: solid #337FED 1px;
+   text-decoration: none;
+   display: inline-block;
+   cursor: pointer;
+   text-align: center;
+}
+
+input[type="submit"]:hover {
+   border: solid #337FED 1px;
+   background: #1E62D0;
+   border-radius: 20px;
+   text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+  input[type="submit"]{
+    margin-left: 25%;
+  }
 }
 </style>

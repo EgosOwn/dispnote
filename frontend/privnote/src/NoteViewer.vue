@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import ReadNoteIntro from './components/HelloReadNote.vue'
+import DispNoteIntro from './components/HelloDispNote.vue'
 import NoteViewer from './components/NoteViewer.vue'
 </script>
 
 <template>
   <header>
-    <h1>📝</h1>
     <div class="wrapper">
-      <ReadNoteIntro msg="ReadNote" sub="Someone has a note for you! It will disappear forever once you close this page" />
+      <DispNoteIntro msg="DispNote" sub="This message will disappear once the page is closed." />
     </div>
   </header>
 
@@ -24,6 +23,15 @@ header h1{
   font-size: 3em;
 }
 
+textarea{
+  font-size: 1.3em;
+}
+
+@media (max-width: 1024px) {
+  header{
+    margin-bottom: 2em;
+  }
+}
 
 @media (min-width: 1024px) {
   header {
